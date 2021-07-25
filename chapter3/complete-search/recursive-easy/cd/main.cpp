@@ -1,10 +1,12 @@
 #include <iostream>
 #include <vector>
-#include <stack>
+#include <deque>
 
-bool print_solution(std::stack<int>& solution, int& sum, std::vector<int> track, int idx, int n);
-void printStack(std::stack<int> some_stack);
-int sumStack(std::stack<int> some_stack);
+
+void find_solution(std::deque<int>& tmp, std::deque<int>& result, std::vector<int> track, int idx, int n); 
+void printDeque(std::deque<int>& deque);
+int sumDeque(std::deque<int>& deque);
+void copyDeque(std::deque<int>& origin, std::deque<int>& destination);
 
 int main() {
 	int counter{0};
@@ -19,7 +21,10 @@ int main() {
 		}
 		
 		std::vector<int> t(track);
-		std::stack<int> solution;
+		std::deque<int> tmp(track);
+		std::deque<int> result(track);
+
+
 
 		for (int i{0}; i < track; i++) {
 			int duration{0};
@@ -28,68 +33,75 @@ int main() {
 			t.at(i) = duration;
 		}
 	
-		int sum{0};
-		print_solution(solution, sum, t, 0, n);
+
+		find_solution(tmp, result, t, 0, n);
+
 		// std::cout << "Final solution: ";
 		
-		printStack(solution);
-		std::cout << "sum:" << sumStack(solution) << "\n";
+		printDeque(result);
+		std::cout << "sum:" << sumDeque(result) << "\n";
 
 		// print_solution(n, track, t);
 		counter++;	
 	}	
 }
 
-bool print_solution(std::stack<int>& solution, int& sum, std::vector<int> track, int idx, int n) { 
-	// count current sum from solution
-	if (idx >= track.size()) {
-		return true;
-	}
-
-	solution.push(track.at(idx));
+void find_solution(std::deque<int>& tmp, std::deque<int>& result, std::vector<int> track, int idx, int n) {
+	int sum_tmp{ sumDeque(tmp) };
 	
-	if (sumStack(solution) > n) {
-		return false;
-	}
+	if (sum_tmp > n) {
+		return;
+	}	
 
-	for(int i{idx + 1}; i < track.size(); i++) {
-		bool solutionFound{print_solution(solution, sum, track, i, n)};
-		if (solutionFound) {
-			// printStack(solution);
-			// std::cout << "\n";
-		} else {
-			solution.pop();
+	
+	int sum_result { sumDeque(result) };
+	
+	if (idx >= track.size()) {
+		int delta_tmp = n - sum_tmp;
+		int delta_result = n - sum_result;
+		if (delta_tmp < delta_result) {
+			copyDeque(tmp, result);
 		}
-	}
-	// std::cout << "\n";
-
-	return true;	
-}
-
-
-void printStack(std::stack<int> some_stack) {
-	if (some_stack.empty()) {
+		// printDeque(tmp);
+		// std::cout << "hm\n";
 		return;
 	}
-	int val = some_stack.top();
-	some_stack.pop();
-	printStack(some_stack);
-	std::cout << val << " ";
-	some_stack.push(val);
+
+
+	find_solution(tmp, result, track, idx+1, n);
+	if (sum_tmp + track.at(idx) <= n) {
+		tmp.push_front(track.at(idx));
+		find_solution(tmp, result, track, idx+1, n);
+		tmp.pop_front();
+	}
+
 }
 
-int sumStack(std::stack<int> some_stack) {
-	if (some_stack.empty()) {
-		return 0;
-	}
-	
-	int val = some_stack.top();
-	some_stack.pop();
 
-	int sum = val + sumStack(some_stack);
+void printDeque(std::deque<int>& stack) {
+	for (int i{0}; i< stack.size(); i++) {
+		std::cout << stack.at(i) << " ";
+	}
+}
+
+int sumDeque(std::deque<int>& stack) {
+	int sum{0};
 	
-	some_stack.push(val);
+	for (int i{0}; i < stack.size(); i++) {
+		sum += stack.at(i);
+	}
 
 	return sum;
+}
+
+void copyDeque(std::deque<int>& origin, std::deque<int>& dest) {
+	dest.clear();
+	dest.resize(0);
+	for (int i{0}; i < origin.size(); i++) {
+		if (origin.at(i) == 0) {
+			continue;
+		}
+		dest.push_front(origin.at(i));
+	}
 }
 
