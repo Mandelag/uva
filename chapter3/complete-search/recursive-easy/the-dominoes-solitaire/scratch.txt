@@ -1,0 +1,18 @@
+
+Define domino card:
+
+struct Domino {
+	int left;
+	int right;
+};
+
+also to help look up pair value, we index it using map.
+
+std::map<int, []int> ;
+
+also to help look up which card we already use, we use some set.
+std::vector<bool> used;
+
+
+iterate "path" left and right of the domino, to other left/right of other dominos, maximum of n.
+if it ends up with the last domino piece, solution is found!
