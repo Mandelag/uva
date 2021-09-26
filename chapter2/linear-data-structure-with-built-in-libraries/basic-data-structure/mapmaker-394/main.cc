@@ -23,6 +23,8 @@ struct cs {
 
 cs get_c(array_data);
 
+void printVector(std::vector<int>);
+
 int main() {
 	array_data x = {
 		name: "KEENAN", 
@@ -42,14 +44,15 @@ int main() {
 	int total = result.c0;
 	for(int i{0}; i < input.size(); i++) {
 		total += input.at(i) * result.C.at(i); 
-	}	
+	}
 	std::cout << result.c0 << "  uhuyy  " << total << std::endl;
 }
 
 cs get_c(array_data ad) {
 	std::vector<int> C(ad.member.size());
 	C.at(C.size()-1) = ad.element_size;
-	for (size_t i{C.size()-2}; i>0 ; i--) {
+	// today i learned for loop descending for size_t will not exit if condition j-- < 0
+	for (int i{ad.dimensions-2}; i >=0 ; i--){
 		C.at(i) = C.at(i+1) * (ad.member.at(i+1).max - ad.member.at(i+1).min + 1);
 	}
 	int c0{ad.base_address};
@@ -63,4 +66,9 @@ cs get_c(array_data ad) {
 
 }
 
-
+void printVector(std::vector<int> v) {
+	for(int i : v ) {
+		std::cout << i << ", ";
+	}
+	std::cout << std::endl;
+}
