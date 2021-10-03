@@ -1,7 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <iomanip>
 
+
+// need to learn about this solution, since the debug test case all pased 
+// but still get wrong answer 
+// https://github.com/Sajed49/UVa-Problem-Solutions/blob/master/newspaper.cpp
 int main() {
 	int n;
 	
@@ -42,9 +47,9 @@ int main() {
 			}
 		}
 
-		std::cout.precision(2);
-		float dollar{ cents / (float) 100};
-		std::cout << std::fixed << dollar << "$" << std::endl;
+		// std::cout.precision(2);
+		double dollar{ cents / (double) 100};
+		std::cout << std::setprecision(2) << std::fixed << dollar << "$" << std::endl;
 		
 	}
 }
